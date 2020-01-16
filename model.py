@@ -109,13 +109,29 @@ raise NotImplementedError('Implement me')
 
 ## Implement rest of ImageDataGenerators and fit_generator
 ### Implement test_datagen = ImageDataGenerator() - Simon
-raise NotImplementedError('Implement me')
+test_datagen = ImageDataGenerator(rescale=1. / 255)
 ### Implement train_generator = train_datagen.flow_from_directory() - Simon
-raise NotImplementedError('Implement me')
+train_generator = train_datagen.flow_from_directory(
+    train_data_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='categorical'
+)
 ### Implement test_generator = test_datagen.flow_from_directory() - Simon
-raise NotImplementedError('Implement me')
+test_generator = test_datagen.flow_from_directory(
+    directory=test_data_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size, # some say it should be 1, I oriented myself on the project linked at the top
+    class_mode='categorical' # None is another suggested value for this field
+)
 ### Implement model.fit_generator() - Simon
-raise NotImplementedError('Implement me')
+model.fit_generator(
+    train_generator,
+    steps_per_epoch=nb_train_samples // batch_size,
+    epochs=epochs,
+    validation_data=test_generator,
+    validation_steps=nb_validation_samples // batch_size
+)
 
 
 
