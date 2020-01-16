@@ -24,7 +24,7 @@ from tensorflow.keras import backend as K
 # import matplotlib.image
 # import os
 # from PIL import Image
-# tf.enable_eager_execution()
+tf.enable_eager_execution()
 
 #################################################################
 #                  Load Data and Preprocessing                  #
@@ -34,51 +34,35 @@ from tensorflow.keras import backend as K
 ## will change it back to normal.
 
 ### Get ready to load data and preprocess - Hyobin
-input_shape = (300,300,3)
+input_shape = (200,300,3)
 num_classes = 3
-train_data_dir = '/home/hyobin/Documents/WiSe1920/CVDL/dataset/rock-paper-scissors-dataset/rock-paper-scissors/train' # Change for run
-validation_data_dir = '/home/hyobin/Documents/WiSe1920/CVDL/dataset/rock-paper-scissors-dataset/rock-paper-scissors/validation'
-test_data_dir = '/home/hyobin/Documents/WiSe1920/CVDL/dataset/rock-paper-scissors-dataset/rock-paper-scissors/test'
+datagen = ImageDataGenerator()
+train_data_dir = '/home/Documents/data/train' # Change for run
+validation_data_dir = '/home/Documents/data/validation'
+test_data_dir = '/home/Documents/data/test'
 nb_train_samples = 100
 nb_validation_samples = 10
 epochs = 1
 batch_size = 10
 
 if K.image_data_format() == 'channels_first':
-    input_shape = (3, 300, 300)
+    input_shape = (3, img_width, img_height)
 else:
-    input_shape = (300,300,3)
+    input_shape = (img_width, img_height, 3)
 
 ### Preprocess the data properly - Hyobin
-# normalize images.
-datagen = ImageDataGenerator(
-    # normalize images, featurewise.
-    featurewise_center=True,
-    featurewise_std_normalization=True)
-# load data: already done for Simon :D
-train_generator = train_datagen.flow_from_directory(
-        train_data_dir,
-        target_size=(300, 300),
-        batch_size=batch_size,
-        classes = ["rock", "paper", "scissors"],
-        class_mode='categorical')
-test_generator = test_datagen.flow_from_directory(
-        test_data_dir,
-        target_size=(300, 300),
-        batch_size=batch_size,
-        classes = ["rock", "paper", "scissors"],
-        class_mode='categorical')
+raise NotImplementedError('Implement me')
+
 ### convert class vectors to binary class matrices - Hyobin
-# class_mode = 'categorical' will take care of this.
+raise NotImplementedError('Implement me')
 
 
-print("hi")
+
 
 ###########################################################################
 # Implement the architecture from original paper(Zeiler and Fergus, 2014) #
 ###########################################################################
 
-model = Sequential()
 ### Implement Layer 1 - Arslan
 model.add(Conv2D(filters=96, kernel_size=(7,7), strides=2, 
                  activation='relu', input_shape=input_shape))
@@ -92,24 +76,26 @@ raise NotImplementedError('Implement me')
 raise NotImplementedError('Implement me')
 
 ### Implement Layer 2 - Arslan
-model.add(Conv2D(filters=256, kernel_size=(7,7), strides=2, 
-                 activation='relu'))
+model.add(Conv2D(filters=256, kernel_size=(7,7), strides=2, activation='relu')
 model.add(MaxPool2D(pool_size=(3,3), strides=2))
 
 
 
 ### Implement Layer 3 - Aya
-raise NotImplementedError('Implement me')
+model.add(Conv2D(filters=384, kernel_size=(3,3),padding='same', strides=1, activation='relu')
 ### Implement Layer 4 - Aya
-raise NotImplementedError('Implement me')
+model.add(Conv2D(filters=384, kernel_size=(3,3),padding='same', strides=1, activation='relu')
 ### Implement Layer 5 - Aya
-raise NotImplementedError('Implement me')
+model.add(Conv2D(filters=256, kernel_size=(1,1),padding='same', strides=1, activation='relu')
+model.add(MaxPool2D(pool_size=(3,3), strides=2))
 ### Implement Layer 6 - Aya
-raise NotImplementedError('Implement me')
+model.add(Flatten())
+model.add(Dense(4096, activation='relu'))
 
 
 
 ### Implement Layer 7 and summary() - Dimitri
+model.add(Dense(4096, activation='relu'))
 model.add(Dense(num_classes, activation='softmax'))
 model.summary()
 ### Implement model.compile() - Dimitri
